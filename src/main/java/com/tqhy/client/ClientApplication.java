@@ -4,11 +4,16 @@ import com.tqhy.client.jna.GlobalKeyListener;
 import com.tqhy.client.unique.AlreadyLockedException;
 import com.tqhy.client.unique.JUnique;
 import com.tqhy.client.utils.FXMLUtils;
+import com.tqhy.client.utils.ViewsUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.Rectangle2D;
-import javafx.stage.Screen;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.slf4j.Logger;
@@ -67,35 +72,46 @@ public class ClientApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         stage = primaryStage;
+        initPrimaryStage(stage);
         stage.setOnCloseRequest(event -> {
             event.consume();
             FXMLUtils.loadPopWindow("/static/fxml/warning_onclose.fxml");
         });
-
-        initPrimaryStageSize();
-
     }
 
     /**
-     * 初始最大化窗口,固定窗体大小
+     * 初始化主窗口
+     *
+     * @param primaryStage
+     * @throws IOException
      */
-    private void initPrimaryStageSize() {
+    private void initPrimaryStage(Stage primaryStage) throws IOException {
+        Platform.setImplicitExit(false);
+        Parent root = FXMLLoader.load(getClass().getResource("/float/float.fxml"));
+        primaryStage.initStyle(StageStyle.TRANSPARENT);
+        primaryStage.setAlwaysOnTop(true);
+        primaryStage.getIcons()
+                    .add(new javafx.scene.image.Image(
+                            getClass().getResourceAsStream("/deploy/package/windows/logo_title.png")));
+        javafx.scene.shape.Rectangle rect = new Rectangle(50, 50);
+        rect.setArcHeight(25);
+        rect.setArcWidth(25);
+        root.setClip(rect);
 
-        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
-        stage.setX(visualBounds.getMinX());
-        stage.setY(visualBounds.getMinY());
-        logger.info("stage: x {}, y {}", stage.getX(), stage.getY());
-        stage.setMaximized(true);
-        FXMLUtils.loadWindow(stage, "/static/fxml/main.fxml", true);
-        double st_width = stage.getWidth();
-        double st_height = stage.getHeight();
-        logger.info("st width {}, height {}", st_width, st_height);
-        stage.setMinWidth(st_width);
-        stage.setMinHeight(st_height);
-        stage.setMaxWidth(st_width);
-        stage.setMaxHeight(st_height);
+        Scene scene = new Scene(root, 50, 50);
+        scene.setFill(Color.TRANSPARENT);
+        primaryStage.setScene(scene);
+        primaryStage.setX(ViewsUtils.getMaxX(50 * 2));
+        primaryStage.setY(ViewsUtils.getScreenHeight() / 2);
+        primaryStage.show();
 
+        primaryStage.setOnCloseRequest(event -> {
+            logger.info("onclose request...");
+            event.consume();
+            FXMLUtils.loadPopWindow("/static/fxml/warning_onclose.fxml");
+        });
     }
+
 
     /**
      * 创建系统托盘图标
