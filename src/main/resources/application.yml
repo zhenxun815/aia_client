@@ -1,0 +1,18 @@
+server:
+    port: 59527
+
+#db
+spring:
+    datasource:
+        driver-class-name:
+
+path:
+    data: /data/
+
+#log
+logging:
+    path: ./logs/
+    file:
+        max-size: 30MB
+        max-history: 3
+
