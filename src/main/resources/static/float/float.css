@@ -1,0 +1,15 @@
+.anchor-pane {
+    -fx-pref-width: 50px;
+    -fx-pref-height: 50px;
+    -fx-base: transparent;
+    -fx-background-image: url(float-default.png);
+    /*-fx-background-color: dimgray;*/
+    -fx-background-radius: 25px;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+}
+
+.anchor-pane:pressed {
+    -fx-background-image: url(float-ondrag.png);
+}
+

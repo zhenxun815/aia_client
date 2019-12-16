@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/8"
+            fx:controller="com.tqhy.client.controller.FloatController"
+            fx:id="anchorPane"
+            stylesheets="/float/float.css"
+            styleClass="anchor-pane"
+            onMouseDragged="#drag"
+            onMousePressed="#press">
+
+</AnchorPane>
