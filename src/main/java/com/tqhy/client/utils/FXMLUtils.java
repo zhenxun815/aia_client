@@ -1,17 +1,12 @@
 package com.tqhy.client.utils;
 
 import com.tqhy.client.ClientApplication;
-import com.tqhy.client.controllers.PreloaderController;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
@@ -83,17 +78,6 @@ public class FXMLUtils {
         return loadWindow(ClientApplication.snapshotStage, url, true);
     }
 
-    public static Stage loadChooseModel(String url) {
-        if (null == ClientApplication.chooseModelStage) {
-            ClientApplication.chooseModelStage = new Stage();
-            ClientApplication.chooseModelStage.initStyle(StageStyle.DECORATED);
-        }
-        ClientApplication.chooseModelStage.setHeight(500D);
-        ClientApplication.chooseModelStage.setWidth(415D);
-        ClientApplication.chooseModelStage.setResizable(false);
-        ClientApplication.chooseModelStage.setIconified(false);
-        return loadWindow(ClientApplication.chooseModelStage, url, false);
-    }
 
     /**
      * 打开新窗口
@@ -117,26 +101,6 @@ public class FXMLUtils {
         return null;
     }
 
-    /**
-     * 打开新窗口
-     *
-     * @param stage
-     * @param url
-     * @return
-     */
-    public static PreloaderController loadPreloader(Stage stage, String url) {
-        try {
-            FXMLLoader loader = new FXMLLoader(FXMLUtils.class.getResource(url));
-            Parent parentNode = loader.load();
-            loadScene(stage, parentNode, false);
-            stage.show();
-            PreloaderController preloaderController = loader.getController();
-            return preloaderController;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     /**
      * 向{@link Stage Stage}加载{@link Scene Scene}
@@ -155,10 +119,6 @@ public class FXMLUtils {
             scene = new Scene(parentNode, Color.TRANSPARENT);
         }
         scene.getStylesheets().add(NetworkUtils.toExternalForm("/static/css/fx_root.css"));
-        KeyCombination kc = new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN);
-        scene.getAccelerators().put(kc, () -> {
-            Platform.runLater(() -> FXMLUtils.loadChooseModel("/static/fxml/choose_model.fxml"));
-        });
         stage.setScene(scene);
         stage.getIcons().add(new Image(NetworkUtils.toExternalForm("/static/img/logo_title_light.png")));
     }
