@@ -117,7 +117,7 @@ public class SnapshotController extends BaseWebviewController {
             String imgUrl = msg.get(0);
             logger.info("upload onNext flag is {}, msg is {}", flag, imgUrl);
             String clientId = NetworkUtils.getPhysicalAddress();
-            String url = Network.SERVER_BASE_URL + "aia/index.html?clientId=" + clientId + "&imgUrl=" + imgUrl;
+            String url = Network.SERVER_BASE_URL + "aia/init.html?clientId=" + clientId + "&imgUrl=" + imgUrl;
             logger.info("load page {}", url);
             loadPage(webView, url);
         }
