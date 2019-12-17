@@ -8,14 +8,19 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
+@Controller
 public class FloatController {
+
     @FXML
     AnchorPane anchorPane;
+
     private double xOffset = 0;
     private double yOffset = 0;
     private Logger logger = LoggerFactory.getLogger(FloatController.class);
 
+    @FXML
     public void press(MouseEvent event) {
         //anchorPane.setStyle("-fx-background-color: green;");
         event.consume();
@@ -35,6 +40,7 @@ public class FloatController {
 
     }
 
+    @FXML
     public void drag(MouseEvent event) {
         event.consume();
         //anchorPane.setStyle("-fx-background-color: lightseagreen;");
