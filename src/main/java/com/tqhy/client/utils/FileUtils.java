@@ -4,14 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -21,84 +21,8 @@ import java.util.function.Function;
  */
 public class FileUtils {
 
-
     static Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
-
-    /**
-     * 根绝后缀名判断是否jpg文件
-     *
-     * @param fileToJudge
-     * @return
-     */
-    public static boolean isJpgFile(File fileToJudge) {
-        logger.info("into judge file is jpg...");
-        String fileName = fileToJudge.getName().toLowerCase();
-        if (!(fileName.endsWith("jpg") || fileName.endsWith("jpeg"))) {
-            return false;
-        }
-
-        try {
-            ImageInputStream iis = ImageIO.createImageInputStream(fileToJudge);
-            Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
-            while (readers.hasNext()) {
-                ImageReader reader = readers.next();
-                String formatName = reader.getFormatName();
-                if ("jpeg".equals(formatName.toLowerCase())) {
-                    return true;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    /**
-     * 判断文件是否是DCM文件
-     *
-     * @param fileToJudge
-     * @return
-     */
-    public static boolean isDcmFile(File fileToJudge) {
-        logger.info("into judge file is dcm...");
-        byte[] bytes = new byte[132];
-        try (FileInputStream in = new FileInputStream(fileToJudge)) {
-            int len = readAvailable(in, bytes, 0, 132);
-            return 132 == len && bytes[128] == 'D' && bytes[129] == 'I' && bytes[130] == 'C' && bytes[131] == 'M';
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    /**
-     * 判断是否可读取指定长度信息
-     *
-     * @param in
-     * @param b   要读取的字节数组
-     * @param off 开始位置偏移量
-     * @param len 读取最大长度
-     * @return 读取到长度
-     * @throws IOException
-     */
-    public static int readAvailable(InputStream in, byte b[], int off, int len) throws IOException {
-        if (off < 0 || len < 0 || off + len > b.length) {
-            throw new IndexOutOfBoundsException();
-        }
-        int wpos = off;
-        while (len > 0) {
-            int count = in.read(b, wpos, len);
-            if (count < 0) {
-                break;
-            }
-            wpos += count;
-            len -= count;
-        }
-        return wpos - off;
-    }
 
     /**
      * 删除文件夹
