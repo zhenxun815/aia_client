@@ -24,12 +24,6 @@ public class FileUtils {
 
     static Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
-    public static Optional<File> transToJpg(File fileToTrans, File jpgDir) {
-        File jpgFile = Dcm2JpgUtil.convert(fileToTrans, jpgDir);
-        logger.info("file to trans complete {}", fileToTrans.getAbsolutePath());
-        return Optional.ofNullable(jpgFile);
-    }
-
 
     /**
      * 根绝后缀名判断是否jpg文件
