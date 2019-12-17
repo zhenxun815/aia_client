@@ -42,8 +42,9 @@ public class SnapshotController extends BaseWebviewController {
     void initialize() {
         super.initialize(webView);
 
-        String captureImgPath = ImgUtils.captureScreen(imgStorePath);
-        uploadCaptureImg(captureImgPath);
+        if (ImgUtils.captureScreen(imgStorePath)) {
+            uploadCaptureImg(imgStorePath);
+        }
 
     }
 
