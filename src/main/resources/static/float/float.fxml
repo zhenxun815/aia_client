@@ -3,9 +3,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/8"
-            fx:controller="com.tqhy.client.controller.FloatController"
+            fx:controller="com.tqhy.client.controllers.FloatController"
             fx:id="anchorPane"
-            stylesheets="/float/float.css"
+            stylesheets="@./float.css"
             styleClass="anchor-pane"
             onMouseDragged="#drag"
             onMousePressed="#press">
