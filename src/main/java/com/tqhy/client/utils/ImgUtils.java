@@ -43,41 +43,36 @@ public class ImgUtils {
      * @return
      * @throws Exception
      */
-    public static String captureScreen(String screenImgPath) {
+    public static boolean captureScreen(String screenImgPath) {
         logger.info("start cap screen to {}", screenImgPath);
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice[] screenDevices = ge.getScreenDevices();
-        int screenIndex = 0;
-        GraphicsDevice secondDevice = screenDevices[screenIndex];
-        Rectangle secondBounds = secondDevice.getDefaultConfiguration().getBounds();
-        Robot robot = null;
         try {
-            robot = new Robot();
-        } catch (AWTException e) {
-            e.printStackTrace();
-        }
-        BufferedImage image = robot.createScreenCapture(secondBounds);
-        // 截图保存的路径
-        File screenImg = new File(screenImgPath);
-        // 如果路径不存在,则创建
-        if (!screenImg.getParentFile().exists()) {
-            screenImg.getParentFile().mkdirs();
-        }
-        //判断文件是否存在，不存在就创建文件
-        if (!screenImg.exists() && !screenImg.isDirectory()) {
-            screenImg.mkdir();
-        }
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            GraphicsDevice[] screenDevices = ge.getScreenDevices();
+            int screenIndex = 0;
+            GraphicsDevice secondDevice = screenDevices[screenIndex];
+            Rectangle secondBounds = secondDevice.getDefaultConfiguration().getBounds();
+            Robot robot = new Robot();
+            BufferedImage image = robot.createScreenCapture(secondBounds);
+            // 截图保存的路径
+            File screenImg = new File(screenImgPath);
+            // 如果路径不存在,则创建
+            if (!screenImg.getParentFile().exists()) {
+                screenImg.getParentFile().mkdirs();
+            }
+            //判断文件是否存在，不存在就创建文件
+            if (!screenImg.exists() && !screenImg.isDirectory()) {
+                screenImg.mkdir();
+            }
 
-        try {
-            ImageIO.write(image, "jpg", screenImg);
-        } catch (IOException e) {
+            return ImageIO.write(image, "jpg", screenImg);
+        } catch (IOException | AWTException e) {
             e.printStackTrace();
         }
         //自动打开
         /*if (Desktop.isDesktopSupported()
                  && Desktop.getDesktop().isSupported(Desktop.Action.OPEN))
                     Desktop.getDesktop().open(f);*/
-        return screenImg.getAbsolutePath();
+        return false;
     }
 
     /**
