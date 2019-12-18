@@ -26,6 +26,7 @@ import static com.tqhy.client.ClientApplication.springContext;
 public class FXMLUtils {
 
     static Logger logger = LoggerFactory.getLogger(FXMLUtils.class);
+    static Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
 
     public static void loadMenu(String url, double left, double top, double width, double height) {
 
@@ -72,7 +73,14 @@ public class FXMLUtils {
             ClientApplication.snapshotStage.initStyle(StageStyle.UTILITY);
         }
         ClientApplication.stage.setIconified(true);
-        ClientApplication.snapshotStage.setMaximized(true);
+        ClientApplication.snapshotStage.setWidth(512D);
+        ClientApplication.snapshotStage.setHeight(662D);
+
+        double visualWidth = visualBounds.getWidth();
+        double visualHeight = visualBounds.getHeight();
+
+        ClientApplication.snapshotStage.setX((visualWidth - 512D) / 2);
+        ClientApplication.snapshotStage.setY((visualHeight - 662D) / 2);
         ClientApplication.snapshotStage.setResizable(false);
         ClientApplication.snapshotStage.setIconified(false);
         return loadWindow(ClientApplication.snapshotStage, url, true);
@@ -111,7 +119,6 @@ public class FXMLUtils {
     public static void loadScene(Stage stage, Parent parentNode, boolean fullScreen) {
         Scene scene = null;
         if (fullScreen) {
-            Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
             double visualWidth = visualBounds.getWidth();
             double visualHeight = visualBounds.getHeight();
             scene = new Scene(parentNode, visualWidth, visualHeight, Color.TRANSPARENT);
@@ -120,7 +127,7 @@ public class FXMLUtils {
         }
         scene.getStylesheets().add(NetworkUtils.toExternalForm("/static/css/fx_root.css"));
         stage.setScene(scene);
-        stage.getIcons().add(new Image(NetworkUtils.toExternalForm("/static/img/logo_title_light.png")));
+        stage.getIcons().add(new Image(NetworkUtils.toExternalForm("/static/img/AIAlogo.png")));
     }
 
     /**
@@ -148,7 +155,6 @@ public class FXMLUtils {
      * @param pane
      */
     public static void center2Display(Pane pane) {
-        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
         double visualWidth = visualBounds.getWidth();
         double visualHeight = visualBounds.getHeight();
 
