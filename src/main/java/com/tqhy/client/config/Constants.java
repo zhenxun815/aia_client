@@ -15,7 +15,7 @@ public class Constants {
 
 
     //alert('upload_case;' + uploadId + ';' + uploadTargetName)
-    public static final String CMD_MSG_UPLOAD = "upload";
+    public static final String CMD_MSG_FULLSCREEN = "fullScreen";
 
     public static final String CMD_MSG_DOWNLOAD = "download";
 
