@@ -1,5 +1,6 @@
 package com.tqhy.client.controllers;
 
+import com.tqhy.client.ClientApplication;
 import com.tqhy.client.config.Constants;
 import com.tqhy.client.network.Network;
 import com.tqhy.client.network.app.JavaAppBase;
@@ -9,12 +10,14 @@ import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Worker;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.CacheHint;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
@@ -85,6 +88,16 @@ public class BaseWebviewController {
                            heartBeatService.stopBeat();
                            logout();
                            break;
+                       case Constants.CMD_MSG_FULLSCREEN:
+                           //ClientApplication.snapshotStage.setMaximized(true);
+                           Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
+                           double visualWidth = visualBounds.getWidth();
+                           double visualHeight = visualBounds.getHeight();
+                           ClientApplication.snapshotStage.setX(visualBounds.getMinX());
+                           ClientApplication.snapshotStage.setY(visualBounds.getMinY());
+                           ClientApplication.snapshotStage.setWidth(visualWidth);
+                           ClientApplication.snapshotStage.setHeight(visualHeight);
+                           break;
                        default:
                            showAlert(data);
                    }
@@ -132,7 +145,7 @@ public class BaseWebviewController {
         Platform.runLater(() -> {
             Dialog<ButtonType> alert = new Dialog<>();
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image(NetworkUtils.toExternalForm("/static/img/logo_title_light.png")));
+            stage.getIcons().add(new Image(NetworkUtils.toExternalForm("/static/img/AIAlogo.png")));
             alert.getDialogPane().setContentText(message);
             alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
             alert.showAndWait();
