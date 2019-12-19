@@ -1,19 +1,19 @@
 package com.tqhy.client.utils;
 
+import com.google.gson.Gson;
 import com.tqhy.client.config.Constants;
-import com.tqhy.client.models.msg.BaseMsg;
 import com.tqhy.client.models.msg.server.ClientMsg;
 import com.tqhy.client.network.Network;
+import io.reactivex.schedulers.Schedulers;
+import javafx.application.Platform;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -103,31 +103,32 @@ public class NetworkUtils {
      *
      * @return
      */
-    public static String initServerIP() {
+    public static void initServerIP() {
         logger.info("into init webEngine..");
 
         String serverIP = PropertyUtils.getProperty(Constants.SERVER_IP);
         if (StringUtils.isEmpty(serverIP)) {
-            return "";
+            Platform.runLater(() -> FXMLUtils.loadPopWindow("/static/fxml/warning_server_ip.fxml"));
         }
 
         Network.setServerBaseUrl(serverIP);
-        try {
-            ResponseBody body = Network.getAicApi()
-                                       .pingServer()
-                                       .execute()
-                                       .body();
+        Network.getAicApi()
+               .heartbeat(NetworkUtils.getPhysicalAddress())
+               .observeOn(Schedulers.io())
+               .subscribeOn(Schedulers.trampoline())
+               .blockingSubscribe(responseBody -> {
+                   String json = responseBody.string();
+                   //logger.info("heart beat response json is: {}", json);
+                   ClientMsg clientMsg = new Gson().fromJson(json, ClientMsg.class);
+                   Integer flag = clientMsg.getFlag();
+                   if (1 == flag) {
+                       logger.info("init server IP success ...");
+                   } else if (Constants.CMD_STATUS_LOGOUT == flag) {
+                       logger.info("failed to init server IP...");
+                       Platform.runLater(() -> FXMLUtils.loadPopWindow("/static/fxml/warning_server_ip.fxml"));
+                   }
+               });
 
-            ClientMsg clientMsg = GsonUtils.parseResponseToObj(body);
-            Integer flag = clientMsg.getFlag();
-            logger.info("ping server ip: " + serverIP + ", get flag: " + flag);
-            if (BaseMsg.SUCCESS == flag) {
-                return serverIP;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 
 
