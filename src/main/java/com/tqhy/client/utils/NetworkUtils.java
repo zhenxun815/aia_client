@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
 /**
@@ -103,12 +104,14 @@ public class NetworkUtils {
      *
      * @return
      */
-    public static void initServerIP() {
-        logger.info("into init webEngine..");
+    public static boolean initServerIP() {
+        logger.info("into initServerIP..");
 
+        AtomicBoolean startHeartBeat = new AtomicBoolean(false);
         String serverIP = PropertyUtils.getProperty(Constants.SERVER_IP);
         if (StringUtils.isEmpty(serverIP)) {
             Platform.runLater(() -> FXMLUtils.loadPopWindow("/static/fxml/warning_server_ip.fxml"));
+            return startHeartBeat.get();
         }
 
         Network.setServerBaseUrl(serverIP);
@@ -116,6 +119,10 @@ public class NetworkUtils {
                .heartbeat(NetworkUtils.getPhysicalAddress())
                .observeOn(Schedulers.io())
                .subscribeOn(Schedulers.trampoline())
+               .doOnError(error -> {
+                   logger.error("init server IP error...{}", error);
+                   Platform.runLater(() -> FXMLUtils.loadPopWindow("/static/fxml/warning_server_ip.fxml"));
+               })
                .blockingSubscribe(responseBody -> {
                    String json = responseBody.string();
                    //logger.info("heart beat response json is: {}", json);
@@ -123,12 +130,13 @@ public class NetworkUtils {
                    Integer flag = clientMsg.getFlag();
                    if (1 == flag) {
                        logger.info("init server IP success ...");
+                       startHeartBeat.set(true);
                    } else if (Constants.CMD_STATUS_LOGOUT == flag) {
                        logger.info("failed to init server IP...");
                        Platform.runLater(() -> FXMLUtils.loadPopWindow("/static/fxml/warning_server_ip.fxml"));
                    }
                });
-
+        return startHeartBeat.get();
     }
 
 
