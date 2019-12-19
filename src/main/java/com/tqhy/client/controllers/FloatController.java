@@ -1,5 +1,7 @@
 package com.tqhy.client.controllers;
 
+import com.tqhy.client.service.HeartBeatService;
+import com.tqhy.client.utils.NetworkUtils;
 import com.tqhy.client.utils.ViewsUtils;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseButton;
@@ -8,6 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -19,6 +22,16 @@ public class FloatController {
     private double xOffset = 0;
     private double yOffset = 0;
     private Logger logger = LoggerFactory.getLogger(FloatController.class);
+
+    @Autowired
+    HeartBeatService heartBeatService;
+
+    @FXML
+    void initialize() {
+        if (NetworkUtils.initServerIP()) {
+            heartBeatService.startBeat();
+        }
+    }
 
     @FXML
     public void press(MouseEvent event) {
