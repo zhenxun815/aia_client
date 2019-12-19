@@ -4,11 +4,12 @@ import com.google.gson.Gson;
 import com.tqhy.client.config.Constants;
 import com.tqhy.client.models.msg.server.ClientMsg;
 import com.tqhy.client.network.Network;
+import com.tqhy.client.utils.FXMLUtils;
+import com.tqhy.client.utils.NetworkUtils;
 import com.tqhy.client.utils.PropertyUtils;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.application.Platform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,18 +30,16 @@ public class HeartBeatService {
 
     private static String status;
     Logger logger = LoggerFactory.getLogger(HeartBeatService.class);
-    private String token;
-    private BooleanProperty jumpToLandingFlag = new SimpleBooleanProperty(false);
 
     public void stopBeat() {
         status = CMD_MSG_STOP_BEAT;
-        Network.TOKEN = null;
+        Platform.runLater(() -> FXMLUtils.loadPopWindow("/static/fxml/warning_max_client.fxml"));
     }
 
-    public void startBeat(String t) {
+    public void startBeat() {
         status = CMD_MSG_CONTINUE_BEAT;
-        this.token = t;
-        //logger.info("into start beat...{}", token);
+        String token = NetworkUtils.getPhysicalAddress();
+        logger.info("into start beat...{}", token);
         Observable.interval(5, TimeUnit.SECONDS)
                   .takeWhile(beatTimes -> CMD_MSG_CONTINUE_BEAT.equals(status))
                   .observeOn(Schedulers.trampoline())
@@ -63,27 +62,13 @@ public class HeartBeatService {
                                      if (1 == flag) {
                                          logger.info("heart beat continue...{}", token);
                                          status = CMD_MSG_CONTINUE_BEAT;
-                                         setJumpToLandingFlag(false);
                                      } else if (Constants.CMD_STATUS_LOGOUT == flag) {
                                          logger.info("heart beat stop...");
                                          stopBeat();
-                                         setJumpToLandingFlag(true);
                                      }
                                  });
                       }
 
                   });
-    }
-
-    public boolean isJumpToLandingFlag() {
-        return jumpToLandingFlag.get();
-    }
-
-    public void setJumpToLandingFlag(boolean jumpToLandingFlag) {
-        this.jumpToLandingFlag.set(jumpToLandingFlag);
-    }
-
-    public BooleanProperty jumpToLandingFlagProperty() {
-        return jumpToLandingFlag;
     }
 }
