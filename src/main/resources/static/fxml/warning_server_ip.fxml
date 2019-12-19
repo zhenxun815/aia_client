@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" styleClass="window_root"
+            stylesheets="@../css/fx_warnning_onclose.css" xmlns="http://javafx.com/javafx/8.0.172-ea"
+            fx:controller="com.tqhy.client.controllers.WarningOnServerIPController">
+
+    <VBox fx:id="base_pane" styleClass="base_pane" minWidth="600" minHeight="228">
+        <children>
+            <Text fx:id="text_success_desc" styleClass="text_title">连接服务器IP失败,请稍后重试!
+                <VBox.margin>
+                    <Insets>
+                        <top>55</top>
+                    </Insets>
+                </VBox.margin>
+            </Text>
+            <HBox alignment="BOTTOM_CENTER">
+                <VBox.margin>
+                    <Insets>
+                        <top>50</top>
+                    </Insets>
+                </VBox.margin>
+
+                <Button fx:id="btn_close_confirm" onMouseClicked="#closeConfirm" styleClass="btn_confirm">确认
+                    <HBox.margin>
+                        <Insets>
+                            <left>15</left>
+                        </Insets>
+                    </HBox.margin>
+                </Button>
+            </HBox>
+
+        </children>
+    </VBox>
+</AnchorPane>
