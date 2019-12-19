@@ -1,11 +1,6 @@
 server:
     port: 59527
 
-#db
-spring:
-    datasource:
-        driver-class-name:
-
 path:
     data: /data/
 
