@@ -50,8 +50,8 @@ public class Network {
     }
 
     public static void setServerBaseUrl(String ip) {
-        //SERVER_BASE_URL = "http://" + ip + "/";
-        SERVER_BASE_URL = "http://192.168.1.176:8080/";
+        SERVER_BASE_URL = "http://" + ip + "/";
+        //SERVER_BASE_URL = "http://192.168.1.176:8080/";
         aicApi = null;
     }
 
