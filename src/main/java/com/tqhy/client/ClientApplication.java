@@ -1,6 +1,7 @@
 package com.tqhy.client;
 
 import com.tqhy.client.jna.GlobalKeyListener;
+import com.tqhy.client.service.HeartBeatService;
 import com.tqhy.client.unique.AlreadyLockedException;
 import com.tqhy.client.unique.JUnique;
 import com.tqhy.client.utils.FXMLUtils;
@@ -18,6 +19,7 @@ import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -41,6 +43,9 @@ public class ClientApplication extends Application {
     public static Stage menuStage;
     public static Stage snapshotStage;
     static Logger logger = LoggerFactory.getLogger(ClientApplication.class);
+
+    @Autowired
+    HeartBeatService heartBeatService;
 
     public static void main(String[] args) {
         System.setProperty("java.awt.headless", "false");
@@ -70,6 +75,7 @@ public class ClientApplication extends Application {
         initPrimaryStage(primaryStage);
     }
 
+
     /**
      * 初始化主窗口
      *
@@ -91,9 +97,9 @@ public class ClientApplication extends Application {
         logger.info("load float complete...");
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setAlwaysOnTop(true);
-//        primaryStage.getIcons()
-//                    .add(new javafx.scene.image.Image(
-//                            getClass().getResourceAsStream("/deploy/package/windows/logo_title.png")));
+        primaryStage.getIcons()
+                    .add(new javafx.scene.image.Image(
+                            getClass().getResourceAsStream("/static/img/AIAlogo.png")));
         javafx.scene.shape.Rectangle rect = new Rectangle(50, 50);
         rect.setArcHeight(25);
         rect.setArcWidth(25);
