@@ -1,7 +1,6 @@
 package com.tqhy.client.utils;
 
 
-import com.tqhy.client.config.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -58,11 +57,4 @@ public class PropertyUtils {
         }
     }
 
-    public static String getUserName() {
-        return getProperty(Constants.USERNAME);
-    }
-
-    public static void setUserName(String name) {
-        setProperty(Constants.USERNAME, name);
-    }
 }
