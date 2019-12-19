@@ -59,8 +59,6 @@ public class BaseWebviewController {
     void initialize(WebView webView) {
         initWebView(webView);
         initWebAlert(webView);
-        initJumpToLanding(webView);
-        initJumpToConnection(webView);
     }
 
     /**
@@ -102,38 +100,6 @@ public class BaseWebviewController {
                            showAlert(data);
                    }
                });
-    }
-
-
-    /**
-     * 初始化跳转登录页面逻辑
-     */
-    private void initJumpToLanding(WebView webView) {
-        jumpToLandingFlag.bindBidirectional(heartBeatService.jumpToLandingFlagProperty());
-        jumpToLandingFlag.addListener((observable, oldValue, newValue) -> {
-            logger.info("jumpToLandingFlag changed,oldValue is: " + oldValue + ", newValue is: " + newValue);
-            if (newValue) {
-                Platform.runLater(() -> {
-                    logger.info("jump to landing");
-                    webView.getEngine().load(Network.LOCAL_BASE_URL + landingUrl);
-                });
-                jumpToLandingFlag.set(false);
-            }
-        });
-    }
-
-    private void initJumpToConnection(WebView webView) {
-        heartBeatService.stopBeat();
-        jumpToConnectionFlag.addListener((observable, oldValue, newValue) -> {
-            logger.info("jumpToLandingFlag changed,oldValue is: " + oldValue + ", newValue is: " + newValue);
-            if (newValue) {
-                Platform.runLater(() -> {
-                    logger.info("jump to landing");
-                    webView.getEngine().load(Network.LOCAL_BASE_URL + connectionUrl);
-                });
-                jumpToConnectionFlag.setValue(false);
-            }
-        });
     }
 
     /**
