@@ -27,7 +27,7 @@ public class GlobalKeyListener implements NativeKeyListener {
 
     @Override
     public void nativeKeyPressed(NativeKeyEvent event) {
-        if (event.getKeyCode() == NativeKeyEvent.VC_CONTROL) {
+        if (event.getKeyCode() == NativeKeyEvent.VC_ALT) {
             ctrlPressed = true;
             //logger.info("ctrl Pressed: {}", ctrlPressed);
         }
@@ -53,7 +53,7 @@ public class GlobalKeyListener implements NativeKeyListener {
     @Override
     public void nativeKeyReleased(NativeKeyEvent event) {
         //logger.info("Key Released: " + NativeKeyEvent.getKeyText(event.getKeyCode()));
-        if (event.getKeyCode() == NativeKeyEvent.VC_CONTROL) {
+        if (event.getKeyCode() == NativeKeyEvent.VC_ALT) {
             ctrlPressed = false;
         }
 
