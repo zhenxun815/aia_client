@@ -1,5 +1,6 @@
 package com.tqhy.client.controllers;
 
+import com.tqhy.client.ClientApplication;
 import com.tqhy.client.models.msg.server.ClientMsg;
 import com.tqhy.client.network.Network;
 import com.tqhy.client.utils.FileUtils;
@@ -41,11 +42,25 @@ public class SnapshotController extends BaseWebviewController {
     @FXML
     void initialize() {
         super.initialize(webView);
-
+        initStage();
         if (ImgUtils.captureScreen(imgStorePath)) {
             uploadCaptureImg(imgStorePath);
         }
 
+        ClientApplication.snapshotStage.setOnCloseRequest(event -> {
+            event.consume();
+            logger.info("snap stage close...");
+            ClientApplication.snapshotStage.close();
+            ClientApplication.stage.setIconified(false);
+        });
+    }
+
+    private void initStage() {
+        ClientApplication.snapshotStage.setOnCloseRequest(event -> {
+            event.consume();
+            ClientApplication.snapshotStage.close();
+            ClientApplication.stage.show();
+        });
     }
 
     private void uploadCaptureImg(String captureImgPath) {
