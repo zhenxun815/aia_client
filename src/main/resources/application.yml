@@ -1,5 +1,5 @@
 server:
-    port: 59527
+    port: 49527
 
 path:
     data: /data/
