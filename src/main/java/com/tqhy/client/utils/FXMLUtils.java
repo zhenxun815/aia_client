@@ -73,13 +73,13 @@ public class FXMLUtils {
             ClientApplication.snapshotStage.initStyle(StageStyle.UTILITY);
         }
         ClientApplication.stage.setIconified(true);
-        ClientApplication.snapshotStage.setWidth(512D);
+        ClientApplication.snapshotStage.setWidth(528D);
         ClientApplication.snapshotStage.setHeight(662D);
 
         double visualWidth = visualBounds.getWidth();
         double visualHeight = visualBounds.getHeight();
 
-        ClientApplication.snapshotStage.setX((visualWidth - 512D) / 2);
+        ClientApplication.snapshotStage.setX((visualWidth - 528D) / 2);
         ClientApplication.snapshotStage.setY((visualHeight - 662D) / 2);
         ClientApplication.snapshotStage.setResizable(false);
         ClientApplication.snapshotStage.setIconified(false);
