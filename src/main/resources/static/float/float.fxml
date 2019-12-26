@@ -7,7 +7,8 @@
             fx:id="anchorPane"
             stylesheets="@./float.css"
             styleClass="anchor-pane"
-            onMouseDragged="#drag"
-            onMousePressed="#press">
+            onMouseReleased="#onClick"
+            onMouseDragged="#onDrag"
+            onMousePressed="#onPress">
 
 </AnchorPane>

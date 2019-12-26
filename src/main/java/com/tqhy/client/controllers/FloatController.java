@@ -1,8 +1,10 @@
 package com.tqhy.client.controllers;
 
 import com.tqhy.client.service.HeartBeatService;
+import com.tqhy.client.utils.FXMLUtils;
 import com.tqhy.client.utils.NetworkUtils;
 import com.tqhy.client.utils.ViewsUtils;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -34,7 +36,7 @@ public class FloatController {
     }
 
     @FXML
-    public void press(MouseEvent event) {
+    public void onPress(MouseEvent event) {
         //anchorPane.setStyle("-fx-background-color: green;");
         event.consume();
         MouseButton button = event.getButton();
@@ -54,7 +56,7 @@ public class FloatController {
     }
 
     @FXML
-    public void drag(MouseEvent event) {
+    public void onDrag(MouseEvent event) {
         event.consume();
         //anchorPane.setStyle("-fx-background-color: lightseagreen;");
         MouseButton button = event.getButton();
@@ -73,6 +75,16 @@ public class FloatController {
                 stage.setX(x < maxX * 2 / 3 ? maxX * 2 / 3 : (x > maxX ? maxX : x));
                 stage.setY(y < maxY * 1 / 3 ? maxY * 1 / 3 : (y > maxY ? maxY : y));
             }
+        }
+    }
+
+    @FXML
+    public void onClick(MouseEvent event) {
+        event.consume();
+        MouseButton button = event.getButton();
+        if (MouseButton.SECONDARY == button) {
+            logger.info("onclick...");
+            Platform.runLater(() -> FXMLUtils.loadSnapshot("/static/fxml/snapshot.fxml"));
         }
     }
 }
