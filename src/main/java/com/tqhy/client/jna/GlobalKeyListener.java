@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 public class GlobalKeyListener implements NativeKeyListener {
 
-    boolean ctrlPressed = false;
+    boolean altPressed = false;
     boolean sPressed = false;
     boolean qPressed = false;
 
@@ -28,7 +28,7 @@ public class GlobalKeyListener implements NativeKeyListener {
     @Override
     public void nativeKeyPressed(NativeKeyEvent event) {
         if (event.getKeyCode() == NativeKeyEvent.VC_ALT) {
-            ctrlPressed = true;
+            altPressed = true;
             //logger.info("ctrl Pressed: {}", ctrlPressed);
         }
         if (event.getKeyCode() == NativeKeyEvent.VC_Q) {
@@ -41,12 +41,16 @@ public class GlobalKeyListener implements NativeKeyListener {
             //logger.info("s Pressed: {}", sPressed);
         }
 
-        if (ctrlPressed && sPressed) {
+        if (altPressed && sPressed) {
             logger.info("start snapshot...");
             Platform.runLater(() -> FXMLUtils.loadSnapshot("/static/fxml/snapshot.fxml"));
-        } else if (ctrlPressed && qPressed) {
+            altPressed = false;
+            sPressed = false;
+        } else if (altPressed && qPressed) {
             logger.info("shot key fired...");
             Platform.runLater(() -> FXMLUtils.loadPopWindow("/static/fxml/warning_onclose.fxml"));
+            altPressed = false;
+            qPressed = false;
         }
     }
 
@@ -54,7 +58,7 @@ public class GlobalKeyListener implements NativeKeyListener {
     public void nativeKeyReleased(NativeKeyEvent event) {
         //logger.info("Key Released: " + NativeKeyEvent.getKeyText(event.getKeyCode()));
         if (event.getKeyCode() == NativeKeyEvent.VC_ALT) {
-            ctrlPressed = false;
+            altPressed = false;
         }
 
         if (event.getKeyCode() == NativeKeyEvent.VC_Q) {
